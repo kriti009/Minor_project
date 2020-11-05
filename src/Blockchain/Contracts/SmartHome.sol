@@ -6,6 +6,7 @@ contract SmartHome{
     struct Insurer{
         string name;
         string contactno;
+        uint damageCount;
     }
     struct Damage{
         address home;
@@ -46,6 +47,7 @@ contract SmartHome{
         damages[id].area = area;
         damages[id].device = device;
         homes[msg.sender].damagesArr.push(id);
+        insurers[insurer].damageCount++;
         damageArr.push(id);
     }
     
@@ -61,20 +63,17 @@ contract SmartHome{
         return( homes[msg.sender].name, homes[msg.sender].contactno, homes[msg.sender].homeAddress,total_damages,homes[msg.sender].damagesArr);
     }
     function getDamagesInsurer() public view returns(uint[] memory){
-        uint[] memory damageBYInsurer;
-        // damageList = damageBYInsurer;
+        uint[] memory damageBYInsurer = new uint[](insurers[msg.sender].damageCount);
+        uint j=0;
         for(uint i=0;i<damageArr.length;i++){
             if(damages[damageArr[i]].insurer == msg.sender){
-                damageBYInsurer.push(damageArr[i]);
+                // damageBYInsurer.push(damageArr[i]);
+                damageBYInsurer[j]=  damageArr[i];
+                j++;
             }
         }
         return damageBYInsurer;
     }
-    // function addNewSensor(string memory sensorId, string memory area, address insurer, string memory device) public{
-    //     homes[msg.sender].sensors[sensorId].area = area;
-    //     homes[msg.sender].sensors[sensorId].insurer = insurer;
-    //     homes[msg.sender].sensors[sensorId].device = device;
-    // }
     function addDummyInsurer(string memory name,string memory contactno) public{
         address dummy = 0xdD870fA1b7C4700F2BD7f44238821C26f7392148;
         insurers[dummy].name = name;
