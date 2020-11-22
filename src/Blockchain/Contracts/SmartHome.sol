@@ -9,6 +9,7 @@ contract SmartHome{
         string homeAddress;
         bool exist;
         uint[] damagesArr; //store all damages of that home
+
     }
 
     struct Damage{
@@ -18,6 +19,7 @@ contract SmartHome{
         address supplier;
         string area;
         string device;
+        string cost;
         Status status;
     }
 
@@ -100,6 +102,7 @@ function compareStrings (string memory a, string memory b) public pure returns (
     }
 
 
+
     //add home
        function addHome(string memory name,string memory contactno, string memory homeAddress ) public {
         homes[msg.sender].name = name;
@@ -162,6 +165,7 @@ function compareStrings (string memory a, string memory b) public pure returns (
         damages[id].supplier=supplier;
         damages[id].area = area;
         damages[id].device = device;
+        damages[id].cost= "-";
 
         homes[msg.sender].damagesArr.push(id); //pushing to map address of home => damages of home
 
@@ -315,5 +319,19 @@ function passDamagetoInves(uint damageid) public{
 
 }
 
+// add estimated cost by supplier
+
+function addCost(string memory cost,uint damageid) public {
+     require(damages[damageid].supplier==msg.sender,"You're not authorized");
+    damages[damageid].cost= cost;
+}
+
+//get cost
+function getCost(uint damageid) public view returns(string memory){
+      require(( damages[damageid].home==msg.sender)||(damages[damageid].insurer==msg.sender) ||(damages[damageid].supplier==msg.sender) ||
+      (damages[damageid].investigator==msg.sender),"You're not authorized to view this");
+
+      return damages[damageid].cost;
+}
 
 }
