@@ -6,10 +6,7 @@ contract SmartHome{
     struct Insurer{
         string name;
         string contactno;
-<<<<<<< HEAD
-=======
         uint damageCount;
->>>>>>> 9b6fd6d025238c7d8a6c4756586064c1004a0440
     }
     struct Damage{
         address home;
