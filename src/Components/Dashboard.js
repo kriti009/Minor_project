@@ -3,6 +3,9 @@ import React from "react";
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Sidebar from './Sidebar';
+import Structure from './Structure';
+import Layout from "antd/lib/layout/layout";
 
 
 class Dashboard extends React.Component {
@@ -58,23 +61,25 @@ class Dashboard extends React.Component {
         ]
         
         return(
-            <div className="container l-5 ">
-                <h3 >Damage Report</h3>
-                <div className="ag-theme-balham" style={tableStyle} >
-                    <AgGridReact
-                        onGridReady={this.onGridReady}
-                        rowData={rowData}
-                    >
-                        <AgGridColumn field="Damage_Id" resizable= "true" ></AgGridColumn>
-                        <AgGridColumn field="Home_Id"></AgGridColumn>
-                        <AgGridColumn field="Insurer_Id"></AgGridColumn>
-                        <AgGridColumn field="Investigator_Id"></AgGridColumn>
-                        <AgGridColumn field="Parts"></AgGridColumn>
-                        <AgGridColumn field="Amount"></AgGridColumn>
-                        <AgGridColumn field="Status"></AgGridColumn>
-                    </AgGridReact>
-                </div>
-            </div>
+            // <Sidebar></Sidebar>
+            <Structure></Structure>
+            // <div className="container l-5 ">
+            //     <h3 >Damage Report</h3>
+            //     <div className="ag-theme-balham" style={tableStyle} >
+            //         <AgGridReact
+            //             onGridReady={this.onGridReady}
+            //             rowData={rowData}
+            //         >
+            //             <AgGridColumn field="Damage_Id" resizable= "true" ></AgGridColumn>
+            //             <AgGridColumn field="Home_Id"></AgGridColumn>
+            //             <AgGridColumn field="Insurer_Id"></AgGridColumn>
+            //             <AgGridColumn field="Investigator_Id"></AgGridColumn>
+            //             <AgGridColumn field="Parts"></AgGridColumn>
+            //             <AgGridColumn field="Amount"></AgGridColumn>
+            //             <AgGridColumn field="Status"></AgGridColumn>
+            //         </AgGridReact>
+            //     </div>
+            // </div>
             
         )
     }
