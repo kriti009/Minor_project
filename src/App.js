@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import DefaultLayout from "./Components/DefaultLayout"
+import Index from "./Components/index"
 
 
 function App() {
   return (
-      <DefaultLayout></DefaultLayout>
+      <Index></Index>
   );
 }
 
