@@ -13,10 +13,10 @@ class Dashboard extends React.Component{
     // const style = {background:'#111d2c', padding: '8px 0 0 0',borderRadius:7, minHeight:75 };
     // const iconStyle = {color:'#bfbfbf', fontSize:40,textAlignment:'center'};
     return(
-      <Content style={{ margin: "24px 16px 0" }}>
+      <Content style={{ margin: "24px 16px 0"}}>
         <div
           // className="site-layout-background"
-          style={{ padding: 10, minHeight: 430 }}
+          style={{ padding: 10, minHeight: 550 }}
         >
         <Row gutter={16} >
           <CountDamageCol data={'Total Damage'} count={'5'} />

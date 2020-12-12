@@ -7,6 +7,8 @@ import { Layout} from "antd";
 import Navbar from "./Components/Navbar";
 import Dashboard from "./Components/Dashboard";
 import Repairs from './Components/Repairs';
+import DamageDetails from './Components/DamageDetails';
+
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
           <Switch> 
             <Route exact path='/' component={Dashboard}></Route> 
             <Route exact path='/repairs' component={Repairs}></Route> 
+            <Route exact path='/details' component={DamageDetails}></Route> 
           </Switch> 
         </Index >
       </div>

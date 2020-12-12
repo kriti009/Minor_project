@@ -28,6 +28,7 @@ class Index extends React.Component{
           onCollapse={(collapsed, type) => {
             console.log(collapsed, type);
           }}
+          style={{minHeight:500}}
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.props.selected]}>

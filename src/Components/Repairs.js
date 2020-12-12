@@ -14,7 +14,7 @@ class Repairs extends React.Component{
       <Content style={{ margin: "24px 16px 0" }}>
         <div
           // className="site-layout-background"
-          style={{ padding: 10, minHeight: 430 }}
+          style={{ padding: 10, minHeight: 550 }}
         >
         {/* <Row gutter={16} >
           <CountDamageCol data={'Total Damage'} count={'5'} />

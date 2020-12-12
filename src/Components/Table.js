@@ -13,7 +13,7 @@ class Table extends React.Component {
       // padding: "8px 0 0 0",
       marginTop: "20px",
       borderRadius: 6,
-      minHeight: 400
+      // minHeight: 400
     };
     return (
       <Row style={style} gutter={[0,7]}>
