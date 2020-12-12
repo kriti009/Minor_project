@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 
 import Navbar from "./Navbar";
-import Context from "./Context";
+// import Context from "./Context";
 
 const {Sider } = Layout;
 
@@ -30,7 +30,7 @@ class Index extends React.Component{
           }}
         >
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["3"]}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[this.props.selected]}>
             <Menu.Item key="1" icon={<SignalFilled />}>
               DASHBOARD
             </Menu.Item>
@@ -43,10 +43,8 @@ class Index extends React.Component{
           </Menu>
         </Sider>
         <Layout>
-          <Navbar data='DASHBOARD'></Navbar>
-          
-          <Context></Context>
-          
+          <Navbar data={this.props.title}></Navbar>
+          {this.props.children}
         </Layout>
       </Layout>
     )

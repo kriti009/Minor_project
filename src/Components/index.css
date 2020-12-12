@@ -15,3 +15,10 @@
   background: #141414;
 }
 
+.ant-steps-item
+  > .ant-steps-item-container
+  > .ant-steps-item-content
+  > .ant-steps-item-title{
+    color: white;
+}
+

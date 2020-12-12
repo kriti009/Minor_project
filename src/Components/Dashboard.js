@@ -8,7 +8,7 @@ import CountDamageCol from './commonComponents/CountDamageCol';
 import Table from './Table'
 const { Content} = Layout;
 
-class Context extends React.Component{
+class Dashboard extends React.Component{
   render(){
     // const style = {background:'#111d2c', padding: '8px 0 0 0',borderRadius:7, minHeight:75 };
     // const iconStyle = {color:'#bfbfbf', fontSize:40,textAlignment:'center'};
@@ -29,4 +29,4 @@ class Context extends React.Component{
     )
   }
 }
-export default Context;
+export default Dashboard;
