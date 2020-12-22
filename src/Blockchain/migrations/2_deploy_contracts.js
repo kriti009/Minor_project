@@ -1,6 +1,5 @@
-var artifacts = require('truffle-artifactor');
-const SmartHome = artifacts.require("SmartHome");
+// const SmartHome = artifacts.require("SmartHome");
 
-module.exports = function(deployer) {
-  deployer.deploy(SmartHome);
-};
+// module.exports = function (deployer) {
+// 	deployer.deploy(SmartHome);
+// };
