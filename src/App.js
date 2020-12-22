@@ -11,21 +11,27 @@ import DamageDetails from './Components/DamageDetails';
 
 
 
-function App() {
-  return (
-    <Router>
-      <div>
-        <Index title='DASHBOARD' selected='1'>
-          <Switch> 
-            <Route exact path='/' component={Dashboard}></Route> 
-            <Route exact path='/repairs' component={Repairs}></Route> 
-            <Route exact path='/details' component={DamageDetails}></Route> 
-          </Switch> 
-        </Index >
-      </div>
-    </Router>
 
-  );
+class App extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render(){
+    return (
+      <Router>
+        <div>
+          <Index title='DASHBOARD' selected='1'>
+            <Switch> 
+              <Route exact path='/' component={Dashboard}></Route> 
+              <Route exact path='/repairs' component={Repairs}></Route> 
+              <Route exact path='/details' component={DamageDetails}></Route> 
+            </Switch> 
+          </Index >
+        </div>
+      </Router>
+    );
+  }
 }
 
 export default App;
+

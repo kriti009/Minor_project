@@ -19,8 +19,8 @@ class Dashboard extends React.Component{
           style={{ padding: 10, minHeight: 550 }}
         >
         <Row gutter={16} >
-          <CountDamageCol data={'Total Damage'} count={'5'} />
-          <CountDamageCol data={'Repairs'} count={'4'} />
+          <CountDamageCol data={'Total Damage'} count={'17'} />
+          <CountDamageCol data={'Repairs'} count={'7'} />
           <CountDamageCol data={'Completed Repairs'} count={'10'} icon={'LikeOutlined'}/>
         </Row>
         <Table/>
