@@ -9,7 +9,12 @@ const { Content} = Layout;
 // const {Col} = Table;
 
 class DamageDetails extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
+        console.log(this.props.location.state.damageid);
+        // console.log(this.props.location.state);
         const style = {
             background: "#111d2c",
             paddingTop: "20px",

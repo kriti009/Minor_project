@@ -18,7 +18,7 @@ class Table extends React.Component {
     return (
       <Row style={style} gutter={[0,7]}>
         <Col style={{color: '#bfbfbf', padding:'10px'}} >Damage Report</Col>
-        <Col><ReportTable /></Col>
+        <Col><ReportTable data={this.props.data}/></Col>
       </Row>
     );
   }

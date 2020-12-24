@@ -1,156 +1,72 @@
 import React from "react";
+// import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 // import ReactDOM from "react-dom";
+import {getDamageDetails} from "../ContractFunc";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Table,Button} from 'antd';
 const { Column} = Table;
+const Status = ['Damage_noticed','Investigation', 'supplier_check', 'approval_pending','parts_replacement', 'resolved'];
 
-const data = [
-  {
-    Damage_Id: "Damage101",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Sink",
-    Amount:"",
-    Status:"Damage Noticed"
-
-  },
-  {
-    Damage_Id: "Damage102",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Sprinkler",
-    Amount:"",
-    Status:"Investigation"
-
-  },
-  {
-    Damage_Id: "Damage103",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Seepage",
-    Amount:"",
-    Status:"Damage noticed  "
-
-  },
-  {
-    Damage_Id: "Damage104",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Water Leakage",
-    Amount:"900",
-    Status:"Approve Request"
-  },
-  {
-    Damage_Id: "Damage105",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Water choke",
-    Amount:"1200",
-    Status:"Insurer Approved"
-
-  },
-  {
-    Damage_Id: "Damage106",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Sprinkler",
-    Amount:"800",
-    Status:"Parts Replaced"
-
-  },
-  {
-    Damage_Id: "Damage107",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Sprinkler",
-    Amount:"1600",
-    Status:"Leak Resolved"
-  },
-  // {
-  //   Damage_Id: "Damage105",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Garden",
-  //   Amount:"4000",
-  //   Status:"Leak Resolved"
-  // },
-  // {
-  //   Damage_Id: "Damage311",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Living Room",
-  //   Amount:"2000",
-  //   Status:"Insurer Approval"
-  // },{
-  //   Damage_Id: "Damage311",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Living Room",
-  //   Amount:"2000",
-  //   Status:"Insurer Approval"
-  // },{
-  //   Damage_Id: "Damage311",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Living Room",
-  //   Amount:"2000",
-  //   Status:"Insurer Approval"
-  // },{
-  //   Damage_Id: "Damage311",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Living Room",
-  //   Amount:"2000",
-  //   Status:"Insurer Approval"
-  // },{
-  //   Damage_Id: "Damage311",
-  //   Home_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Insurer_Id:"0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-  //   Investigator_Id:"0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-  //   Parts: "Living Room",
-  //   Amount:"2000",
-  //   Status:"Insurer Approval"
-  // },
-]
 class ReportTable extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      redirect: null
+    };
+    this.handleOnCLick = this.handleOnCLick.bind(this);
+  }
+  handleOnCLick = () =>{
+    this.setState({redirect:'/details'});
+  }
+	async componentDidMount() {
+    var damages=[];
+    for(var i=0;i<this.props.data.length;i++){
+      var damageid = this.props.data[i];
+      await getDamageDetails(this.props.data[i]).then((res)=>{
+        // console.log(res);
+        damages.push({
+          'Damage_Id': damageid,
+          'Home_Id' : res[0],
+          'Insurer_Id': res[1],
+          'Investigator_Id': res[2],
+          'ServiceProvider_ID': res[3],
+          'Area': res[4],
+          'Parts': res[5],
+          'Status': Status[res[6].words[0]]
+        });
+      });
+    }
+    console.log(damages);
+    this.setState({data:damages});
+  }
+  
   render(){
+    if (this.state.redirect) {
+      return <Redirect push to={{pathname: this.state.redirect, state:{damageid:'5'}}} />
+    }
+    // console.log(this.state.data);
     return(
       <Table 
         size='small' 
-        dataSource={data} 
+        dataSource={this.state.data} 
         scroll={{x:1500,y:350}}
         pagination={{hideOnSinglePage: true}}
       >
-        <Column title="Damage ID" dataIndex="Damage_Id" key="Damage_Id"  />
+        <Column title="Damage ID" dataIndex="Damage_Id" key="Damage_Id" width='7%' />
         <Column title="Home ID" dataIndex="Home_Id" key="Home_Id" />
         <Column title="Insurer ID" dataIndex="Insurer_Id" key="Insurer_Id"/>
         <Column title="Investigator ID" dataIndex="Investigator_Id" key="Investigator_Id" />
         <Column title="ServiceProvider_ID" dataIndex="ServiceProvider_ID" key="ServiceProvider_ID" />
-        <Column title="Parts" dataIndex="Parts" key="Parts" />
-        <Column title="Amount" dataIndex="Amount" key="Amount" />
-        <Column title="Status" dataIndex="Status" key="Status" fixed="right"/>
+        <Column title="Parts" dataIndex="Parts" key="Parts" width='7%'/>
+        <Column title="Amount" dataIndex="Amount" key="Amount" width='7%' />
+        <Column title="Status" dataIndex="Status" key="Status" fixed="right" width='8%'/>
         {/* <Column title="Action" dataIndex="action" key="action"
                 render={() => (<Button>Approve</Button>)} /> */}
+        <Column title="Action" dataIndex="action" key="action" fixed='right' width='5%'
+                render={() => (<Button type='primary' onClick={this.handleOnCLick}>View</Button>)} /> 
       </Table>
     )
   }
