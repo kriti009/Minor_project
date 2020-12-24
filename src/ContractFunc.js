@@ -32,6 +32,14 @@ module.exports = {
 		const contract = await SmartHome.deployed();
 		return await contract.getDamageDetails(damageid);
 	},
+	getStatus: async(damageid)=>{
+		const contract = await SmartHome.deployed();
+		return await contract.getStatus(damageid);
+	},
+	getCost: async(damageid)=>{
+		const contract = await SmartHome.deployed();
+		return await contract.getCost(damageid);
+	},
 	addHome: async (name, contactno, homeAddress)=>{
 		var meta;
 		SmartHome.deployed().then(function(instance){

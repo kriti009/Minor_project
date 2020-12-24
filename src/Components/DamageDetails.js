@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import "./index.css";
 import DetailsTable from './DetailsTable'
 import { Steps, Row,Col,Layout,Table } from "antd";
+import {getStatus} from "../ContractFunc"
 const { Step } = Steps;
 const { Content} = Layout;
 // const {Col} = Table;
@@ -11,10 +12,16 @@ const { Content} = Layout;
 class DamageDetails extends React.Component{
     constructor(props) {
         super(props);
+        this.state = {
+            damageid: this.props.location.state.damageid || 0,
+            status: 0,
+        }
+    }
+    async componentDidMount(){
+        const status = await getStatus(this.state.damageid);
+        this.setState({status:status.words[0]});
     }
     render(){
-        console.log(this.props.location.state.damageid);
-        // console.log(this.props.location.state);
         const style = {
             background: "#111d2c",
             paddingTop: "20px",
@@ -34,7 +41,7 @@ class DamageDetails extends React.Component{
                   style={{ padding: 10, minHeight: 550 }}
                 >
                     <Row gutter={[0,7]} style={style}>
-                        <Steps size="small" current={7} style={{padding:' 0 5px'}}>
+                        <Steps size="small" current={this.state.status} style={{padding:' 0 5px'}}>
                         <Step  title="Damage Noticed" />
                         <Step title="Investigation" />
                         <Step title="Supplier Check" />

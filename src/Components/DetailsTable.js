@@ -2,27 +2,18 @@ import React from "react";
 // import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import "./index.css";
-import { Table,Button, message, Modal, Input} from 'antd';
+import {Layout, Table,Button, message, Modal, Input} from 'antd';
+import {getDamageDetails, getCost} from "../ContractFunc";
 const { Column} = Table;
+const Status = ['Damage_noticed','Investigation', 'supplier_check', 'approval_pending','parts_replacement', 'resolved'];
 
-const data = [
-  {
-    Damage_Id: "Damage104",
-    Home_Id:"0xFDa61711ceB408a2Bde2a0992Fda133Ae333d3f8",
-    Insurer_Id:"0x46d5ab5FB9F039244ed838841B38530e399BC82a",
-    Investigator_Id:"0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a",
-    ServiceProvider_ID: "0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327",
-    Parts: "Water Leakage",
-    Amount:"900",
-    Status:"Damage Resolved"
-  },
-]
+
 class DetailsTable extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      loading: false,
-      visible: false
+      loading: true,
+      data: []
     };
     this.EnterAmount  = this.EnterAmount.bind(this);
   }
@@ -48,11 +39,41 @@ class DetailsTable extends React.Component{
     const hide = message.loading('Parts Replaced,Setting Trigger OFF ...Please Wait!!', 0);
     setTimeout(hide, 2500);
   }
+  async componentDidMount(){
+    const damageid = 1;
+    var damage= [];
+    const cost= await getCost(damageid);
+    await getDamageDetails(damageid).then((res)=>{
+      // console.log(res);
+      damage.push({
+        'Damage_Id': damageid,
+        'Home_Id' : res[0],
+        'Insurer_Id': res[1],
+        'Investigator_Id': res[2],
+        'ServiceProvider_ID': res[3],
+        'Area': res[4],
+        'Parts': res[5],
+        'amount': cost,
+        'Status': Status[res[6].words[0]]
+      });
+    });
+    console.log(damage);
+    this.setState({data:damage,loading:false});
+  }
   render(){
+    if(this.state.loading){
+      return(
+          <Layout>
+              {/* <Dimmer active inverted>
+                  <Loader size='massive'>Hang On...</Loader>
+              </Dimmer> */}
+          </Layout>
+      );
+    }
     return(
       <Table 
         size='small' 
-        dataSource={data} 
+        dataSource={this.state.data} 
         scroll={{x:1500,y:350}}
         pagination={{hideOnSinglePage: true}}
       >
@@ -67,7 +88,7 @@ class DetailsTable extends React.Component{
         <Column title="Action" dataIndex="action" key="action"
                 render={() => (
                 <>
-                {/* <Button type="primary" onClick={this.handleUpdate}>Resolved</Button> */}
+                <Button type="primary" onClick={this.handleUpdate}>Approve</Button>
                 <Modal
                   visible={this.state.visible}
                   title="Enter Repair Amount"
