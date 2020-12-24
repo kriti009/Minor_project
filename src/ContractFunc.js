@@ -23,9 +23,13 @@ module.exports = {
 	getHome: async () => {
 		const contract = await SmartHome.deployed();
 		// console.log(contract);
-		const res = await contract.getHome();
-		console.log(res);
-		return {'success': 'yeah'};
+		// const res = await contract.getHome();
+		// console.log(res);
+		// return {'success': 'yeah'};
+		contract.getHome().then((value)=>{
+			console.log(value);
+			return value;
+		}).catch((e)=>{console.log(e)});
 	},
 	getAllDamage: async()=>{
 		const contract = await SmartHome.deployed();
