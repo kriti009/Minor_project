@@ -22,7 +22,14 @@ module.exports = {
 
 	getHome: async () => {
 		const contract = await SmartHome.deployed();
-		return await contract.getHome();
+		// console.log(contract);
+		const res = await contract.getHome();
+		console.log(res);
+		return {'success': 'yeah'};
+	},
+	getAllDamage: async()=>{
+		const contract = await SmartHome.deployed();
+		return await contract.getAllDamage();
 	},
 	addHome: async (name, contactno, homeAddress)=>{
 		var meta;
@@ -39,11 +46,32 @@ module.exports = {
 		var meta;
 		SmartHome.deployed().then(function(instance){
 			meta = instance;
-			return meta.addHome(name, contactno,device , {from: web3.eth.accounts[0]});
-		}).then(function(value){
-			console.log(value);
-		}).catch(function(e){
-			console.log(e);
-		})
+			return meta.addInsurer(name, contactno,device , {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	}, 
+	addInvestigator : async (name, contactno, device)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addInvestigator(name, contactno,device , {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	}, 
+	addSupplier : async (name, contactno, device)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addSupplier(name, contactno,device , {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	}, 
+	addDamage : async (insurer, investigator, supplier, area, device)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addDamage(insurer, investigator, supplier, area, device, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
 	},
 };
