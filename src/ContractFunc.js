@@ -13,6 +13,9 @@ if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
 	web3 = new Web3(provider);
 }
 SmartHome.setProvider(web3.currentProvider);
+console.log(web3.eth.accounts[0]);
+// console.log(web3.eth.defaultAccount);
+// console.log(web3.currentProvider);
 
 module.exports = {
 	web3: web3,
@@ -20,5 +23,27 @@ module.exports = {
 	getHome: async () => {
 		const contract = await SmartHome.deployed();
 		return await contract.getHome();
+	},
+	addHome: async (name, contactno, homeAddress)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addHome(name, contactno, homeAddress, {from: web3.eth.accounts[0]});
+		}).then(function(value){
+			console.log(value);
+		}).catch(function(e){
+			console.log(e);
+		})
+	},
+	addInsurer: async (name, contactno, device)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addHome(name, contactno,device , {from: web3.eth.accounts[0]});
+		}).then(function(value){
+			console.log(value);
+		}).catch(function(e){
+			console.log(e);
+		})
 	},
 };

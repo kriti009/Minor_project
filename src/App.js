@@ -8,14 +8,18 @@ import Navbar from "./Components/Navbar";
 import Dashboard from "./Components/Dashboard";
 import Repairs from "./Components/Repairs";
 import DamageDetails from "./Components/DamageDetails";
-import { web3, getHome } from "./ContractFunc";
+import { web3, getHome, addHome, addInsurer } from "./ContractFunc";
 
 class App extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 	async componentDidMount() {
-		const accounts = await web3.eth.getAccounts();
+    // const accounts = await web3.eth.getAccounts();
+    // console.log(accounts);
+    // console.log(web3.eth.defaultAccount);
+	// await  addHome('kriti', '8103116393', '52/1666 ashwani nagar');
+	// await addInsurer('Ram lal', '1111111111', 'kitchen');
 		const home = await getHome();
 		console.log(home);
 	}
