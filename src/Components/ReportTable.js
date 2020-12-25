@@ -2,7 +2,7 @@ import React from "react";
 // import { useHistory } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 // import ReactDOM from "react-dom";
-import {getDamageDetails} from "../ContractFunc";
+import {getDamageDetails, getCost} from "../ContractFunc";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Table,Button,Spin,Alert,Layout} from 'antd';
@@ -24,10 +24,17 @@ class ReportTable extends React.Component{
     this.setState({redirect:'/details', id:id});
   }
 	async componentDidMount() {
+    var cost=[];
+    for(var i=0;i<this.props.data.length;i++){
+      await getCost(this.props.data[i]).then((c)=>{
+        cost.push(c);
+      })
+    };
     var damages=[];
     for(var i=0;i<this.props.data.length;i++){
       var damageid = this.props.data[i];
       await getDamageDetails(this.props.data[i]).then((res)=>{
+        // const cost= getCost(this.props.data[i]);
         // console.log(res);
         damages.push({
           'Damage_Id': damageid,
@@ -37,6 +44,7 @@ class ReportTable extends React.Component{
           'ServiceProvider_ID': res[3],
           'Area': res[4],
           'Parts': res[5],
+          'Amount':cost[i],
           'Status': Status[res[6].words[0]]
         });
       });
@@ -81,7 +89,7 @@ class ReportTable extends React.Component{
         <Column title="ServiceProvider_ID" dataIndex="ServiceProvider_ID" key="ServiceProvider_ID" />
         <Column title="Parts" dataIndex="Parts" key="Parts" width='7%'/>
         <Column title="Amount" dataIndex="Amount" key="Amount" width='7%' />
-        <Column title="Status" dataIndex="Status" key="Status" fixed="right" width='8%'/>
+        <Column title="Status" dataIndex="Status" key="Status" fixed="right" width='9%'/>
         {/* <Column title="Action" dataIndex="action" key="action"
                 render={() => (<Button>Approve</Button>)} /> */}
         <Column title="Action" dataIndex="action" key="action" fixed='right' width='5%'

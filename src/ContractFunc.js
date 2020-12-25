@@ -50,7 +50,7 @@ module.exports = {
 	},
 	getCost: async(damageid)=>{
 		const contract = await SmartHome.deployed();
-		return await contract.getCost(damageid);
+		return await contract.getCost(damageid, {from: web3.eth.accounts[0]});
 	},
 	addHome: async (name, contactno, homeAddress)=>{
 		var meta;
@@ -95,4 +95,44 @@ module.exports = {
 		}).then(function(value){console.log(value);})
 		.catch(function(e){console.log(e);})
 	},
+	passDamagetoInves: async(damageid)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.passDamagetoInves(damageid, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	},
+	passDamagetoSupp:  async(damageid)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.passDamagetoSupp(damageid, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	},
+	addCost: async (cost, damageid)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.addCost(cost, damageid, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	},
+	passDamagetoInsurer:  async (damageid)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.passDamagetoInsurer(damageid, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	},
+	statusUpdateInsur : async(damageid)=>{
+		var meta;
+		SmartHome.deployed().then(function(instance){
+			meta = instance;
+			return meta.statusUpdateInsur(damageid, {from: web3.eth.accounts[0]});
+		}).then(function(value){console.log(value);})
+		.catch(function(e){console.log(e);})
+	}
 };

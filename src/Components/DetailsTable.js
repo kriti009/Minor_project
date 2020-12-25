@@ -1,10 +1,10 @@
 import React from "react";
 import "antd/dist/antd.css";
 import "./index.css";
-import {Layout, Table,Button, message, Modal, Input, Spin, Alert} from 'antd';
-import {getDamageDetails, getCost, web3} from "../ContractFunc";
+import {Layout, Table,Button, message, Modal, Input, Spin, Alert,Form,} from 'antd';
+import {statusUpdateInsur,passDamagetoInsurer, addCost, passDamagetoSupp,passDamagetoInves,getDamageDetails, getCost, web3, getStatus} from "../ContractFunc";
 const { Column} = Table;
-const Status = ['Damage_noticed','Investigation', 'supplier_check', 'approval_pending','parts_replacement', 'resolved'];
+const Status = ['Damage_noticed','Investigation', 'supplier_check', 'approval_pending','parts_replacement', 'Damage resolved'];
 const Addresses = [
   '0xfda61711ceb408a2bde2a0992fda133ae333d3f8', //home
   '0x1590e7593175440b5638840ff58871c31ad03a6f', //home2
@@ -25,17 +25,47 @@ class DetailsTable extends React.Component{
     };
     this.EnterAmount  = this.EnterAmount.bind(this);
     this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleOk =this.handleOk.bind(this);
   }
   showModal = () => {
     this.setState({
       visible: true
     });
   };
-  handleOk = () => {
+  async handleOk (e){
+    var status = await getStatus(this.state.damageid);
+    status = status.words[0];
     this.setState({ loading: true });
+    console.log(e.Amount);
+    addCost(e.Amount, this.state.damageid).then(()=>{
+      this.props.handleStatusUpdate(status+1); 
+      passDamagetoInsurer(this.state.damageid);
+    })
+    
     setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
+      var damage= [];
+      getCost(this.state.damageid).then((cost)=>{
+        getDamageDetails(this.state.damageid).then((res)=>{
+          damage.push({
+            'Damage_Id': this.state.damageid,
+            'Home_Id' : res[0],
+            'Insurer_Id': res[1],
+            'Investigator_Id': res[2],
+            'ServiceProvider_ID': res[3],
+            'Area': res[4],
+            'Parts': res[5],
+            'Amount': cost,
+            'Status': Status[res[6].words[0]]
+          });
+        });
+      });
+      setTimeout(()=>{
+        this.setState({data:damage, loading: false, visible: false });
+        console.log('done');
+      },3000);
+      
+    }, 30000);
+   
   };
   handleCancel = () => {
     this.setState({ visible: false });
@@ -45,15 +75,100 @@ class DetailsTable extends React.Component{
     message.info('Enter amount here!');
   };
   async handleUpdate(){
-    const hide = message.loading('Parts Replaced,Setting Trigger OFF ...Please Wait!!', 0);
-    // if(this.state.userType=='home'){
-    //   if(this.state.data[0].Status>=5){
-    //     const hide = message.loading('Parts Replaced,Setting Trigger OFF ...Please Wait!!', 0);
-    //     await 
-    //   }
-    // }
-    setTimeout(hide, 2500);
-    // this.props.handleStatusUpdate(1);
+    var status = await getStatus(this.state.damageid);
+    
+    status = status.words[0];
+    console.log(status);
+    var damage  =this.state.data;
+          damage.Status = Status[status+1];
+          this.setState({data:damage});
+    // const hide = message.loading('Parts Replaced,Setting Trigger OFF ...Please Wait!!', 0);
+    if(this.state.userType=='home'){
+      if(this.state.data[0].Status=="Damage resolved"){
+        const hide = message.loading('Parts Replaced,Setting Trigger OFF ...Please Wait!!', 0);
+        setTimeout(hide, 2500);
+        this.props.handleStatusUpdate(status+1);
+      }else{
+        message.info('Damage not Resolved Yet');
+      }
+    }
+    if(this.state.userType =='insurer'){
+      if(this.state.data[0].Status=='Damage_noticed'){
+        this.setState({ loading: true });
+        await passDamagetoInves(this.state.damageid).then(()=>{
+          this.props.handleStatusUpdate(status+1); 
+        })
+        const hide = message.loading('Passing Damage to Investigator ...Please Wait!!', 0);
+        setTimeout(hide, 250);
+        setTimeout(() => {
+          var damage= [];
+          getCost(this.state.damageid).then((cost)=>{
+            getDamageDetails(this.state.damageid).then((res)=>{
+              damage.push({
+                'Damage_Id': this.state.damageid,
+                'Home_Id' : res[0],
+                'Insurer_Id': res[1],
+                'Investigator_Id': res[2],
+                'ServiceProvider_ID': res[3],
+                'Area': res[4],
+                'Parts': res[5],
+                'Amount': cost,
+                'Status': Status[res[6].words[0]]
+              });
+            });
+          });
+          setTimeout(()=>{
+            this.setState({data:damage, loading: false, visible: false });
+            console.log('done');
+          },3000);
+        }, 6000);
+      }else if(this.state.data[0].Status=='approval_pending' || this.state.data[0].Status=='parts_replacement'){
+          this.setState({ loading: true });
+          await statusUpdateInsur(this.state.damageid).then(()=>{
+            this.props.handleStatusUpdate(status+1); 
+          })
+          const hide = message.loading('Approving Request ...Please Wait!!', 0);
+          setTimeout(hide, 250);
+          setTimeout(() => {
+            var damage= [];
+            getCost(this.state.damageid).then((cost)=>{
+              getDamageDetails(this.state.damageid).then((res)=>{
+                damage.push({
+                  'Damage_Id': this.state.damageid,
+                  'Home_Id' : res[0],
+                  'Insurer_Id': res[1],
+                  'Investigator_Id': res[2],
+                  'ServiceProvider_ID': res[3],
+                  'Area': res[4],
+                  'Parts': res[5],
+                  'Amount': cost,
+                  'Status': Status[res[6].words[0]]
+                });
+              });
+            });
+            setTimeout(()=>{
+              this.setState({data:damage, loading: false, visible: false });
+              console.log('done');
+            },3000);
+          }, 6000);
+          
+      }else message.info('Wait for supplier to enter repair amount');
+    }
+    if(this.state.userType =='investigator'){
+      if(this.state.data[0].Status=='Investigation'){
+        await passDamagetoSupp(this.state.damageid);
+        const hide = message.loading('Investigation Done, Passing Damage to Supplier ...Please Wait!!', 0);
+        setTimeout(hide, 2500);
+        setTimeout(()=>{
+          this.props.handleStatusUpdate(status+1);
+        },3000);
+      }else message.info('wait for insurer');
+    }
+    if(this.state.userType == 'supplier'){
+      if(this.state.data[0].Status=='supplier_check')
+        this.showModal();
+      else message.info('Wait for Insurer Approval');
+    }
   }
   async componentDidMount(){
     let userType = 'home';
@@ -78,11 +193,11 @@ class DetailsTable extends React.Component{
         'ServiceProvider_ID': res[3],
         'Area': res[4],
         'Parts': res[5],
-        'amount': cost,
+        'Amount': cost,
         'Status': Status[res[6].words[0]]
       });
     });
-    this.setState({data:damage,loading:false, userType:userType});
+    this.setState({damageid: damageid,data:damage,loading:false, userType:userType});
   }
   render(){
     if(this.state.loading){
@@ -122,21 +237,26 @@ class DetailsTable extends React.Component{
             title="Enter Repair Amount"
             onOk={this.handleOk}
             onCancel={this.handleCancel}
-            footer={[
-              <Button key="back" onClick={this.handleCancel}>
-                Return
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                loading={this.state.loading}
-                onClick={this.handleOk}
-              >
-                Update
-              </Button>
-            ]}
+            footer = {null}
           >
-            <Input placeholder="Enter Repair Amount" />
+            <Form
+              name='basic'
+              onFinish={this.handleOk}
+              onFinishFailed={this.handleCancel}
+            >
+              <Form.Item
+                name='Amount'
+                rules={[{ 
+                  required: true,
+                  message: "Please input amount!"
+                }]}
+              >
+                <Input/>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" style={{float:'right'}}>Update</Button>
+              </Form.Item>
+            </Form>
           </Modal>
           </>
           )} />

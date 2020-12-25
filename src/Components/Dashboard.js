@@ -3,7 +3,7 @@ import React from "react";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Layout,Row, Loader} from "antd";
-import { getDamagesSupplier, getDamagesInvestigator, getDamagesInsurer, getHome ,web3} from "../ContractFunc";
+import { getDamagesSupplier, getDamagesInvestigator, getDamagesInsurer, getHome ,web3, addDamage,addHome} from "../ContractFunc";
 import CountDamageCol from './commonComponents/CountDamageCol';
 import Table from './Table'
 const { Content} = Layout;
@@ -26,10 +26,12 @@ class Dashboard extends React.Component{
     }
   }
   async componentDidMount() {
+    // await addDamage('0x46d5ab5FB9F039244ed838841B38530e399BC82a','0xd2BEFe67c5CE6bDf236F7F6e416519a36de6457a','0x7B757630Ab2f2Eb8Dd6F05C920a0621910Fc5327','kitchen','Tap');
       var home;
       const account = web3.eth.accounts[0];
       var damages;
       if(account == Addresses[0] || account==Addresses[1]){
+        
         console.log('handle home');
         home = await getHome();
         console.log(home);

@@ -38,7 +38,6 @@ class DamageDetails extends React.Component{
                         <Step title="Investigation" />
                         <Step title="Supplier Check" />
                         <Step title="Approve Request" />
-                        <Step title="Insurer Approved" />
                         <Step title="Parts Replaced" />
                         <Step title="Damage Resovled" />
                         </Steps>
