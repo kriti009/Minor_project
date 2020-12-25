@@ -13,7 +13,9 @@ const {SubMenu} = Menu;
 class Navbar  extends React.Component{
   constructor(props){
     super(props);
+    
   }
+  
   render(){
     return (
       <Header className="header">
@@ -23,7 +25,7 @@ class Navbar  extends React.Component{
           <Menu.Item key='1' >
             <Search placeholder="Search Damage ID.." style={{ width: 200, padding: '15px 0 0 0'}} />
           </Menu.Item>
-          <Menu.Item key="2" icon={<UserOutlined/>}>
+          <Menu.Item key="2" icon={<UserOutlined/>}  >
           </Menu.Item>
           <SubMenu icon={<SettingOutlined />}>
             <Menu.Item key='setting1'>

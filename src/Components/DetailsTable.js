@@ -156,12 +156,34 @@ class DetailsTable extends React.Component{
     }
     if(this.state.userType =='investigator'){
       if(this.state.data[0].Status=='Investigation'){
-        await passDamagetoSupp(this.state.damageid);
+        this.setState({ loading: true });
+        await passDamagetoSupp(this.state.damageid).then(()=>{
+          this.props.handleStatusUpdate(status+1); 
+        })
         const hide = message.loading('Investigation Done, Passing Damage to Supplier ...Please Wait!!', 0);
         setTimeout(hide, 2500);
-        setTimeout(()=>{
-          this.props.handleStatusUpdate(status+1);
-        },3000);
+        setTimeout(() => {
+          var damage= [];
+          getCost(this.state.damageid).then((cost)=>{
+            getDamageDetails(this.state.damageid).then((res)=>{
+              damage.push({
+                'Damage_Id': this.state.damageid,
+                'Home_Id' : res[0],
+                'Insurer_Id': res[1],
+                'Investigator_Id': res[2],
+                'ServiceProvider_ID': res[3],
+                'Area': res[4],
+                'Parts': res[5],
+                'Amount': cost,
+                'Status': Status[res[6].words[0]]
+              });
+            });
+          });
+          setTimeout(()=>{
+            this.setState({data:damage, loading: false, visible: false });
+            console.log('done');
+          },3000);
+        }, 6000);
       }else message.info('wait for insurer');
     }
     if(this.state.userType == 'supplier'){
