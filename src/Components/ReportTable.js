@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import {getDamageDetails} from "../ContractFunc";
 import "antd/dist/antd.css";
 import "./index.css";
-import { Table,Button} from 'antd';
+import { Table,Button,Spin,Alert,Layout} from 'antd';
 const { Column} = Table;
 const Status = ['Damage_noticed','Investigation', 'supplier_check', 'approval_pending','parts_replacement', 'resolved'];
 
@@ -14,12 +14,14 @@ class ReportTable extends React.Component{
     super(props);
     this.state = {
       data: [],
-      redirect: null
+      redirect: null,
+      id:this.props.data[0],
+      loading:true,
     };
     this.handleOnCLick = this.handleOnCLick.bind(this);
   }
-  handleOnCLick = () =>{
-    this.setState({redirect:'/details'});
+  handleOnCLick = (id) =>{
+    this.setState({redirect:'/details', id:id});
   }
 	async componentDidMount() {
     var damages=[];
@@ -40,12 +42,28 @@ class ReportTable extends React.Component{
       });
     }
     console.log(damages);
-    this.setState({data:damages});
+    this.setState({data:damages,loading:false});
   }
   
   render(){
     if (this.state.redirect) {
-      return <Redirect push to={{pathname: this.state.redirect, state:{damageid:'5'}}} />
+      return <Redirect push to={{
+        pathname: this.state.redirect, 
+        state:{damageid:this.state.id}
+      }} />
+    }
+    if(this.state.loading){
+      return(
+          <Layout>
+              <Spin tip="Loading...">
+                <Alert
+                  message="Hang On"
+                  description="Fetching Data from Server."
+                  type="info"
+                />
+              </Spin>
+          </Layout>
+      );
     }
     // console.log(this.state.data);
     return(
@@ -54,6 +72,7 @@ class ReportTable extends React.Component{
         dataSource={this.state.data} 
         scroll={{x:1500,y:350}}
         pagination={{hideOnSinglePage: true}}
+        rowKey="Damage_Id"
       >
         <Column title="Damage ID" dataIndex="Damage_Id" key="Damage_Id" width='7%' />
         <Column title="Home ID" dataIndex="Home_Id" key="Home_Id" />
@@ -66,7 +85,7 @@ class ReportTable extends React.Component{
         {/* <Column title="Action" dataIndex="action" key="action"
                 render={() => (<Button>Approve</Button>)} /> */}
         <Column title="Action" dataIndex="action" key="action" fixed='right' width='5%'
-                render={() => (<Button type='primary' onClick={this.handleOnCLick}>View</Button>)} /> 
+          render={(text,record,index) => (<Button type='primary' onClick={()=> this.handleOnCLick(record.Damage_Id)}>View</Button>)} /> 
       </Table>
     )
   }

@@ -24,6 +24,18 @@ module.exports = {
 		const contract = await SmartHome.deployed();
 		return await contract.getHome({from: web3.eth.accounts[0]});
 	},
+	getDamagesInsurer: async () =>{
+		const contract = await SmartHome.deployed();
+		return await contract.getDamagesInsurer({from: web3.eth.accounts[0]});
+	},
+	getDamagesInvestigator: async () =>{
+		const contract = await SmartHome.deployed();
+		return await contract.getDamagesInvestigator({from: web3.eth.accounts[0]});
+	},
+	getDamagesSupplier: async () =>{
+		const contract = await SmartHome.deployed();
+		return await contract.getDamagesSupplier({from: web3.eth.accounts[0]});
+	},
 	getAllDamage: async()=>{
 		const contract = await SmartHome.deployed();
 		return await contract.getAllDamage();

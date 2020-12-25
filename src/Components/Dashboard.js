@@ -3,10 +3,17 @@ import React from "react";
 import "antd/dist/antd.css";
 import "./index.css";
 import { Layout,Row, Loader} from "antd";
-import { getHome } from "../ContractFunc";
+import { getDamagesSupplier, getDamagesInvestigator, getDamagesInsurer, getHome ,web3} from "../ContractFunc";
 import CountDamageCol from './commonComponents/CountDamageCol';
 import Table from './Table'
 const { Content} = Layout;
+const Addresses = [
+  '0xfda61711ceb408a2bde2a0992fda133ae333d3f8', //home
+  '0x1590e7593175440b5638840ff58871c31ad03a6f', //home2
+  '0x46d5ab5fb9f039244ed838841b38530e399bc82a', //insurer
+  '0xd2befe67c5ce6bdf236f7f6e416519a36de6457a', //investigator
+  '0x7b757630ab2f2eb8dd6f05c920a0621910fc5327', //supplier
+];
 
 
 class Dashboard extends React.Component{
@@ -19,10 +26,41 @@ class Dashboard extends React.Component{
     }
   }
   async componentDidMount() {
-      const home = await getHome();
-      console.log(home);
-      var damages = home[4].map((obj)=>{return obj.words[0]});
-      this.setState({count: home[4].length, loading:false, damagesArr:damages});
+      var home;
+      const account = web3.eth.accounts[0];
+      var damages;
+      if(account == Addresses[0] || account==Addresses[1]){
+        console.log('handle home');
+        home = await getHome();
+        console.log(home);
+        damages = home[4].map((obj)=>{return obj.words[0]});
+        this.setState({count: home[4].length, loading:false, damagesArr:damages});
+      }
+        
+      if(account == Addresses[2]){
+        console.log('handle insurer');
+        var temp  = await getDamagesInsurer();
+        console.log(temp);
+        damages = temp.map((obj)=>{return obj.words[0]});
+        this.setState({count: temp.length, loading:false, damagesArr:damages});
+      }
+
+      if(account == Addresses[3]){
+        console.log('handle investigator');
+        var temp  = await getDamagesInvestigator();
+        console.log(temp);
+        damages = temp.map((obj)=>{return obj.words[0]});
+        this.setState({count: temp.length, loading:false, damagesArr:damages});
+      }
+
+      if(account == Addresses[4]){
+        console.log('handle Suppiler');
+        var temp  = await getDamagesSupplier();
+        console.log(temp);
+        damages = temp.map((obj)=>{return obj.words[0]});
+        this.setState({count: temp.length, loading:false, damagesArr:damages});
+      }
+      
   }
   render(){
     if(this.state.loading){

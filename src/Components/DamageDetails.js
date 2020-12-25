@@ -1,5 +1,4 @@
 import React from "react";
-// import ReactDOM from "react-dom";
 import "antd/dist/antd.css";
 import "./index.css";
 import DetailsTable from './DetailsTable'
@@ -7,7 +6,6 @@ import { Steps, Row,Col,Layout,Table } from "antd";
 import {getStatus} from "../ContractFunc"
 const { Step } = Steps;
 const { Content} = Layout;
-// const {Col} = Table;
 
 class DamageDetails extends React.Component{
     constructor(props) {
@@ -16,25 +14,19 @@ class DamageDetails extends React.Component{
             damageid: this.props.location.state.damageid || 0,
             status: 0,
         }
+        this.handleStatusUpdate = this.handleStatusUpdate.bind(this);
+    }
+    handleStatusUpdate=(status)=>{
+        this.setState({status:status});
     }
     async componentDidMount(){
+        // console.log(this.props.location.state.damageid);
         const status = await getStatus(this.state.damageid);
         this.setState({status:status.words[0]});
     }
     render(){
-        const style = {
-            background: "#111d2c",
-            paddingTop: "20px",
-            borderRadius: 7,
-            minHeight: 75
-        };
-        const style2 = {
-            background: "#111d2c",
-            // padding: "8px 0 0 0",
-            marginTop: "20px",
-            borderRadius: 6,
-            // minHeight: 400
-          };
+        const style = {background: "#111d2c",paddingTop: "20px",borderRadius: 7,minHeight: 75};
+        const style2 = {background: "#111d2c",marginTop: "20px",borderRadius: 6,};
         return (
             <Content style={{ margin: "24px 16px 0" }}>
                 <div
@@ -53,9 +45,8 @@ class DamageDetails extends React.Component{
                     </Row>
                     <Row style={style2} gutter={[0,7]}>
                         <Col style={{color: '#bfbfbf', padding:'10px'}} >Damage Report</Col>
-                        <Col><DetailsTable /></Col>
+                        <Col><DetailsTable damageid={this.state.damageid} handleStatusUpdate={this.handleStatusUpdate}/></Col>
                     </Row>
-                    
                 </div>
             </Content>
         )
